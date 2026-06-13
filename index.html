@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorthBeam | Digital Goods</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            border-bottom: 1px solid #333333;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1, h2, h3 { margin: 0; letter-spacing: 1px; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        .card {
+            border: 1px solid #333333;
+            background: #111111;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            background: #000000;
+            border: 1px solid #333333;
+            color: #ffffff;
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0 20px 0;
+            box-sizing: border-box;
+        }
+        .btn {
+            background: #ffffff;
+            color: #000000;
+            padding: 12px 24px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: #cccccc; }
+        .btn-bitcoin { background: #f7931a; color: white; } /* Subdued unique element for BTC preference */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>NORTHBEAM</h1>
+        <div>
+            <a href="#store" class="btn" style="background:transparent; color:white; margin-right:15px;">Store</a>
+            <a href="#dashboard" id="dashNav" class="btn">My Dashboard</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Section 1: Storefront Overview -->
+        <div id="storeView" class="card">
+            <h2>PREMIUM DIGITAL PRODUCTS</h2>
+            <p style="color: #888;">Minimalist design. Absolute security. Paid exclusively in Bitcoin.</p>
+            <hr style="border-color: #333; margin: 20px 0;">
+            <div class="grid">
+                <div>
+                    <h3>Digital Product Pack v1</h3>
+                    <p style="color:#888">Instant access download after 1 Bitcoin network confirmation.</p>
+                    <p><strong>Price: 0.0005 BTC</strong></p>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn" onclick="alert('Bitcoin Address for NorthBeam: bc1qprotoypeaddress... \n\nIn our next step, we will connect a live payment system!')">Pay with Bitcoin</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: User Dashboard Framework -->
+        <div id="dashboardView" class="card">
+            <h2>USER DASHBOARD</h2>
+            <p id="welcomeMsg" style="color: #888;">Welcome to your NorthBeam dashboard. Please create an account to activate your portal.</p>
+            
+            <div id="authForm">
+                <h3>Create Account / Register</h3>
+                <form action="/register" method="POST">
+                    <label>Email Address</label>
+                    <input type="email" name="email" required placeholder="you@example.com">
+                    
+                    <label>Create Secure Password</label>
+                    <input type="password" name="password" required placeholder="••••••••">
+                    
+                    <button type="submit" class="btn">Register & Access Dashboard</button>
+                </form>
+            </div>
+
+            <div id="dashboardFeatures" class="hidden">
+                <hr style="border-color: #333; margin: 20px 0;">
+                <div class="grid">
+                    <div style="border: 1px solid #333; padding: 15px;">
+                        <h4>📦 Your Digital Purchases</h4>
+                        <p style="font-size: 13px; color:#888;">No active files. Complete a Bitcoin transfer to unlock files.</p>
+                    </div>
+                    <div style="border: 1px solid #333; padding: 15px;">
+                        <h4>🔑 Account Security</h4>
+                        <p style="font-size: 13px; color:#888;">Connected securely via your Supabase cloud data storage.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple logic to show user dashboard state when registering
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('status') === 'dashboard') {
+            document.getElementById('authForm').classList.add('hidden');
+            document.getElementById('dashboardFeatures').classList.remove('hidden');
+            document.getElementById('welcomeMsg').innerText = "Logged in as: " + urlParams.get('user') + " | Access Level: Customer Portal";
+        }
+    </script>
+</body>
+</html>
