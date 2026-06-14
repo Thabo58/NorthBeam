@@ -3,127 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NorthBeam | Digital Goods</title>
-    <style>
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            border-bottom: 1px solid #333333;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        h1, h2, h3 { margin: 0; letter-spacing: 1px; }
-        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
-        .card {
-            border: 1px solid #333333;
-            background: #111111;
-            padding: 30px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-        input[type="text"], input[type="email"], input[type="password"] {
-            background: #000000;
-            border: 1px solid #333333;
-            color: #ffffff;
-            padding: 10px;
-            width: 100%;
-            margin: 10px 0 20px 0;
-            box-sizing: border-box;
-        }
-        .btn {
-            background: #ffffff;
-            color: #000000;
-            padding: 12px 24px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn:hover { background: #cccccc; }
-        .btn-bitcoin { background: #f7931a; color: white; } /* Subdued unique element for BTC preference */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .hidden { display: none; }
-    </style>
+    <title>NorthBeam | Premium Digital Access</title>
+    <!-- Include Tailwind CSS for modern SaaS styling -->
+    <script src="https://jsdelivr.net"></script>
+    <!-- Include Supabase JS Library -->
+    <script src="https://jsdelivr.net"></script>
 </head>
-<body>
+<body class="bg-black text-white font-sans antialiased selection:bg-white selection:text-black">
 
-    <header>
-        <h1>NORTHBEAM</h1>
-        <div>
-            <a href="#store" class="btn" style="background:transparent; color:white; margin-right:15px;">Store</a>
-            <a href="#dashboard" id="dashNav" class="btn">My Dashboard</a>
+    <script>
+        // CONFIGURATION: Replace these with your actual details
+        const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL"; 
+        const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+        // Initialize Supabase
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Your BTCPay Point of Sale / Invoice Link
+        const BTCPAY_PAYMENT_URL = "YOUR_BTCPAY_SERVER_PRODUCT_OR_APP_URL";
+    </script>
+
+    <!-- Navigation Bar -->
+    <nav class="border-b border-zinc-800 bg-black/50 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="text-xl font-bold tracking-tight">NorthBeam<span class="text-zinc-500">.</span></div>
+        <div id="nav-auth-buttons" class="space-x-4">
+            <button onclick="toggleModal('login-modal')" class="text-sm font-medium text-zinc-400 hover:text-white transition">Log In</button>
+            <button onclick="toggleModal('signup-modal')" class="text-sm font-medium bg-white text-black px-4 py-2 rounded-md hover:bg-zinc-200 transition">Get Started</button>
         </div>
-    </header>
+        <div id="nav-user-zone" class="hidden space-x-4 items-center">
+            <span id="user-email-display" class="text-sm text-zinc-400"></span>
+            <button onclick="handleLogout()" class="text-sm font-medium border border-zinc-800 px-4 py-2 rounded-md hover:bg-zinc-900 transition">Log Out</button>
+        </div>
+    </nav>
 
-    <div class="container">
-        <!-- Section 1: Storefront Overview -->
-        <div id="storeView" class="card">
-            <h2>PREMIUM DIGITAL PRODUCTS</h2>
-            <p style="color: #888;">Minimalist design. Absolute security. Paid exclusively in Bitcoin.</p>
-            <hr style="border-color: #333; margin: 20px 0;">
-            <div class="grid">
+    <!-- Hero Section (Landing Page) -->
+    <main id="landing-page" class="max-w-5xl mx-auto px-6 py-24 text-center space-y-8">
+        <div class="inline-flex items-center gap-2 border border-zinc-800 bg-zinc-900/50 px-3 py-1 rounded-full text-xs font-medium text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Network Active
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tighter max-w-3xl mx-auto leading-none">
+            Next-generation privacy. Built for tomorrow.
+        </h1>
+        <p class="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
+            High-speed, encrypted digital access corridors. Paid exclusively in Bitcoin. No logs, no compromise.
+        </p>
+        
+        <!-- Pricing / Product Card -->
+        <div class="pt-12">
+            <div class="max-w-sm mx-auto border border-zinc-800 bg-zinc-900/20 rounded-2xl p-8 text-left space-y-6 backdrop-blur-sm">
                 <div>
-                    <h3>Digital Product Pack v1</h3>
-                    <p style="color:#888">Instant access download after 1 Bitcoin network confirmation.</p>
-                    <p><strong>Price: 0.0005 BTC</strong></p>
+                    <h3 class="text-xl font-semibold">Premium VPN Access</h3>
+                    <p class="text-zinc-500 text-sm mt-1">Unlimited bandwidth, 5 concurrent devices.</p>
                 </div>
-                <div style="text-align: right; margin-top: 20px;">
-                    <button class="btn" onclick="alert('Bitcoin Address for NorthBeam: bc1qprotoypeaddress... \n\nIn our next step, we will connect a live payment system!')">Pay with Bitcoin</button>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-4xl font-bold">$10</span>
+                    <span class="text-zinc-500 text-sm">/ month</span>
+                </div>
+                <ul class="space-y-3 text-sm text-zinc-400 border-t border-zinc-800 pt-6">
+                    <li class="flex items-center gap-2">✓ Military-grade AES-256 encryption</li>
+                    <li class="flex items-center gap-2">✓ Strictly zero logs retained</li>
+                    <li class="flex items-center gap-2">✓ 10Gbps optimized server relays</li>
+                </ul>
+                <button onclick="handlePurchase()" class="w-full bg-white text-black py-3 rounded-xl font-medium hover:bg-zinc-200 transition text-center block shadow-lg shadow-white/5">
+                    Purchase with Bitcoin
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- User Dashboard Section (Hidden by default) -->
+    <section id="dashboard-page" class="hidden max-w-5xl mx-auto px-6 py-12 space-y-8">
+        <div class="border-b border-zinc-800 pb-6">
+            <h2 class="text-3xl font-bold tracking-tight">Console Dashboard</h2>
+            <p class="text-zinc-400 text-sm mt-1">Manage your active digital keys and network status.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Metric 1 -->
+            <div class="border border-zinc-800 bg-zinc-900/30 p-6 rounded-xl space-y-2">
+                <span class="text-xs text-zinc-500 font-medium uppercase tracking-wider">Account Status</span>
+                <div id="dash-status" class="text-xl font-semibold text-zinc-400">Loading...</div>
+            </div>
+            <!-- Metric 2 -->
+            <div class="border border-zinc-800 bg-zinc-900/30 p-6 rounded-xl space-y-2 md:col-span-2">
+                <span class="text-xs text-zinc-500 font-medium uppercase tracking-wider">Your Active VPN License Key</span>
+                <div id="dash-key" class="text-mono text-sm bg-zinc-950 p-2.5 rounded border border-zinc-800 text-zinc-300 break-all select-all">
+                    Loading...
                 </div>
             </div>
         </div>
 
-        <!-- Section 2: User Dashboard Framework -->
-        <div id="dashboardView" class="card">
-            <h2>USER DASHBOARD</h2>
-            <p id="welcomeMsg" style="color: #888;">Welcome to your NorthBeam dashboard. Please create an account to activate your portal.</p>
-            
-            <div id="authForm">
-                <h3>Create Account / Register</h3>
-                <form action="/register" method="POST">
-                    <label>Email Address</label>
-                    <input type="email" name="email" required placeholder="you@example.com">
-                    
-                    <label>Create Secure Password</label>
-                    <input type="password" name="password" required placeholder="••••••••">
-                    
-                    <button type="submit" class="btn">Register & Access Dashboard</button>
-                </form>
-            </div>
+        <div class="border border-zinc-800 bg-zinc-900/10 p-8 rounded-xl text-center space-y-4">
+            <h3 class="text-lg font-medium">Need to renew or extend access?</h3>
+            <button onclick="handlePurchase()" class="bg-zinc-900 text-white border border-zinc-800 px-6 py-2 rounded-md hover:bg-zinc-800 transition text-sm">
+                Buy Token Extension
+            </button>
+        </div>
+    </section>
 
-            <div id="dashboardFeatures" class="hidden">
-                <hr style="border-color: #333; margin: 20px 0;">
-                <div class="grid">
-                    <div style="border: 1px solid #333; padding: 15px;">
-                        <h4>📦 Your Digital Purchases</h4>
-                        <p style="font-size: 13px; color:#888;">No active files. Complete a Bitcoin transfer to unlock files.</p>
-                    </div>
-                    <div style="border: 1px solid #333; padding: 15px;">
-                        <h4>🔑 Account Security</h4>
-                        <p style="font-size: 13px; color:#888;">Connected securely via your Supabase cloud data storage.</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Authentication Modals (Popups) -->
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 p-8 rounded-xl max-w-md w-full space-y-4 relative">
+            <button onclick="toggleModal('signup-modal')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">&times;</button>
+            <h3 class="text-xl font-bold">Create an Account</h3>
+            <form onsubmit="handleSignup(event)" class="space-y-3">
+                <input type="email" id="signup-email" placeholder="Email Address" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
+                <input type="password" id="signup-password" placeholder="Password" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
+                <button type="submit" class="w-full bg-white text-black py-2 rounded text-sm font-medium hover:bg-zinc-200 transition">Register</button>
+            </form>
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 p-8 rounded-xl max-w-md w-full space-y-4 relative">
+            <button onclick="toggleModal('login-modal')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">&times;</button>
+            <h3 class="text-xl font-bold">Log In</h3>
+            <form onsubmit="handleLogin(event)" class="space-y-3">
+                <input type="email" id="login-email" placeholder="Email Address" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
+                <input type="password" id="login-password" placeholder="Password" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
+                <button type="submit" class="w-full bg-white text-black py-2 rounded text-sm font-medium hover:bg-zinc-200 transition">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Frontend Logic App Script -->
     <script>
-        // Simple logic to show user dashboard state when registering
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('status') === 'dashboard') {
-            document.getElementById('authForm').classList.add('hidden');
-            document.getElementById('dashboardFeatures').classList.remove('hidden');
-            document.getElementById('welcomeMsg').innerText = "Logged in as: " + urlParams.get('user') + " | Access Level: Customer Portal";
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
         }
-    </script>
-</body>
-</html>
+
+        // Direct user to BTCPay Server Payment Wall
+        function handlePurchase() {
+            window.open(BTCPAY_PAYMENT_URL, '_blank');
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            const { data, error } = await supabase.auth.signUp({ email, password });
+            if (error) alert(error.message);
+            else {
+                alert('Success! Check your email inbox for confirmation.');
+                toggleModal('signup-modal');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) alert(error.message);
+            else {
+                toggleModal('login-modal');
+                checkUserSession();
+            }
+        }
+
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            window.location.reload();
+        }
+
+        // Manage views based on whether the user is logged in
+        async function checkUserSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            const navAuth = document.getElementById('nav-auth-buttons');
+       
