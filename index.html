@@ -4,175 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NorthBeam | Premium Digital Access</title>
-    <!-- Include Tailwind CSS for modern SaaS styling -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- Include Supabase JS Library -->
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', sans-serif; }
+        body { background-color: #000000; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 450px; padding: 40px; border: 1px solid #333333; background: #0a0a0a; border-radius: 8px; }
+        h1 { font-size: 28px; font-weight: 700; letter-spacing: -1px; margin-bottom: 30px; text-align: center; text-transform: uppercase; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 12px; text-transform: uppercase; color: #888888; margin-bottom: 8px; letter-spacing: 1px; }
+        input { width: 100%; padding: 14px; background: #111111; border: 1px solid #333333; color: #ffffff; border-radius: 4px; font-size: 16px; }
+        input:focus { border-color: #ffffff; outline: none; }
+        button { width: 100%; padding: 14px; background: #ffffff; color: #000000; border: none; border-radius: 4px; font-size: 14px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #cccccc; }
+        .hidden { display: none; }
+        .dashboard-card { border-top: 1px solid #333333; margin-top: 20px; padding-top: 20px; }
+        .vpn-key-box { background: #111111; padding: 15px; border: 1px dashed #555555; text-align: center; font-family: monospace; font-size: 16px; margin: 15px 0; color: #00ff66; }
+        .nav-links { display: flex; justify-content: space-between; margin-top: 20px; }
+        .nav-links a { color: #888888; font-size: 12px; text-decoration: none; text-transform: uppercase; }
+        .nav-links a:hover { color: #ffffff; }
+    </style>
+    <!-- Supabase JS Library -->
     <script src="https://jsdelivr.net"></script>
 </head>
-<body class="bg-black text-white font-sans antialiased selection:bg-white selection:text-black">
+<body>
 
-    <script>
-        // CONFIGURATION: Replace these with your actual details
-        const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL"; 
-        const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-        // Initialize Supabase
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<div class="container">
+    <h1>NorthBeam</h1>
 
-        // Your BTCPay Point of Sale / Invoice Link
-        const BTCPAY_PAYMENT_URL = "YOUR_BTCPAY_SERVER_PRODUCT_OR_APP_URL";
-    </script>
-
-    <!-- Navigation Bar -->
-    <nav class="border-b border-zinc-800 bg-black/50 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
-        <div class="text-xl font-bold tracking-tight">NorthBeam<span class="text-zinc-500">.</span></div>
-        <div id="nav-auth-buttons" class="space-x-4">
-            <button onclick="toggleModal('login-modal')" class="text-sm font-medium text-zinc-400 hover:text-white transition">Log In</button>
-            <button onclick="toggleModal('signup-modal')" class="text-sm font-medium bg-white text-black px-4 py-2 rounded-md hover:bg-zinc-200 transition">Get Started</button>
+    <!-- AUTH SECTION -->
+    <div id="auth-section">
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="auth-email" placeholder="name@domain.com">
         </div>
-        <div id="nav-user-zone" class="hidden space-x-4 items-center">
-            <span id="user-email-display" class="text-sm text-zinc-400"></span>
-            <button onclick="handleLogout()" class="text-sm font-medium border border-zinc-800 px-4 py-2 rounded-md hover:bg-zinc-900 transition">Log Out</button>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="auth-password" placeholder="••••••••">
         </div>
-    </nav>
+        <button id="btn-login">Sign In / Sign Up</button>
+    </div>
 
-    <!-- Hero Section (Landing Page) -->
-    <main id="landing-page" class="max-w-5xl mx-auto px-6 py-24 text-center space-y-8">
-        <div class="inline-flex items-center gap-2 border border-zinc-800 bg-zinc-900/50 px-3 py-1 rounded-full text-xs font-medium text-zinc-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Network Active
-        </div>
-        <h1 class="text-5xl md:text-7xl font-bold tracking-tighter max-w-3xl mx-auto leading-none">
-            Next-generation privacy. Built for tomorrow.
-        </h1>
-        <p class="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
-            High-speed, encrypted digital access corridors. Paid exclusively in Bitcoin. No logs, no compromise.
-        </p>
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboard-section" class="hidden">
+        <p style="color: #888888; text-align: center;" id="user-welcome"></p>
         
-        <!-- Pricing / Product Card -->
-        <div class="pt-12">
-            <div class="max-w-sm mx-auto border border-zinc-800 bg-zinc-900/20 rounded-2xl p-8 text-left space-y-6 backdrop-blur-sm">
-                <div>
-                    <h3 class="text-xl font-semibold">Premium VPN Access</h3>
-                    <p class="text-zinc-500 text-sm mt-1">Unlimited bandwidth, 5 concurrent devices.</p>
-                </div>
-                <div class="flex items-baseline gap-1">
-                    <span class="text-4xl font-bold">$10</span>
-                    <span class="text-zinc-500 text-sm">/ month</span>
-                </div>
-                <ul class="space-y-3 text-sm text-zinc-400 border-t border-zinc-800 pt-6">
-                    <li class="flex items-center gap-2">✓ Military-grade AES-256 encryption</li>
-                    <li class="flex items-center gap-2">✓ Strictly zero logs retained</li>
-                    <li class="flex items-center gap-2">✓ 10Gbps optimized server relays</li>
-                </ul>
-                <button onclick="handlePurchase()" class="w-full bg-white text-black py-3 rounded-xl font-medium hover:bg-zinc-200 transition text-center block shadow-lg shadow-white/5">
-                    Purchase with Bitcoin
-                </button>
-            </div>
-        </div>
-    </main>
-
-    <!-- User Dashboard Section (Hidden by default) -->
-    <section id="dashboard-page" class="hidden max-w-5xl mx-auto px-6 py-12 space-y-8">
-        <div class="border-b border-zinc-800 pb-6">
-            <h2 class="text-3xl font-bold tracking-tight">Console Dashboard</h2>
-            <p class="text-zinc-400 text-sm mt-1">Manage your active digital keys and network status.</p>
+        <div class="dashboard-card">
+            <label>Your Active VPN Key</label>
+            <div class="vpn-key-box" id="vpn-key-display">Loading...</div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6">
-            <!-- Metric 1 -->
-            <div class="border border-zinc-800 bg-zinc-900/30 p-6 rounded-xl space-y-2">
-                <span class="text-xs text-zinc-500 font-medium uppercase tracking-wider">Account Status</span>
-                <div id="dash-status" class="text-xl font-semibold text-zinc-400">Loading...</div>
-            </div>
-            <!-- Metric 2 -->
-            <div class="border border-zinc-800 bg-zinc-900/30 p-6 rounded-xl space-y-2 md:col-span-2">
-                <span class="text-xs text-zinc-500 font-medium uppercase tracking-wider">Your Active VPN License Key</span>
-                <div id="dash-key" class="text-mono text-sm bg-zinc-950 p-2.5 rounded border border-zinc-800 text-zinc-300 break-all select-all">
-                    Loading...
-                </div>
-            </div>
+        <div class="dashboard-card">
+            <label>Purchase / Extend Access</label>
+            <button id="btn-order-vpn" style="background: transparent; color: #ffffff; border: 1px solid #ffffff; margin-bottom: 10px;">Buy 1 Month (0.00015 BTC)</button>
         </div>
 
-        <div class="border border-zinc-800 bg-zinc-900/10 p-8 rounded-xl text-center space-y-4">
-            <h3 class="text-lg font-medium">Need to renew or extend access?</h3>
-            <button onclick="handlePurchase()" class="bg-zinc-900 text-white border border-zinc-800 px-6 py-2 rounded-md hover:bg-zinc-800 transition text-sm">
-                Buy Token Extension
-            </button>
+        <!-- WALLET PAYMENT MODAL SIMULATION -->
+        <div id="payment-box" class="hidden" style="margin-top: 20px; padding: 15px; background: #111;">
+            <label>Send Bitcoin To:</label>
+            <input type="text" id="btc-address-field" readonly style="font-size: 12px; margin-bottom: 10px;">
+            <p id="btc-amount-field" style="font-size: 14px; margin-bottom: 10px;"></p>
+            <input type="text" id="txid-input" placeholder="Enter Transaction ID (TXID) after sending">
+            <button id="btn-verify" style="margin-top: 10px;">Verify Payment</button>
         </div>
-    </section>
 
-    <!-- Authentication Modals (Popups) -->
-    <!-- Signup Modal -->
-    <div id="signup-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-zinc-950 border border-zinc-800 p-8 rounded-xl max-w-md w-full space-y-4 relative">
-            <button onclick="toggleModal('signup-modal')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">&times;</button>
-            <h3 class="text-xl font-bold">Create an Account</h3>
-            <form onsubmit="handleSignup(event)" class="space-y-3">
-                <input type="email" id="signup-email" placeholder="Email Address" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
-                <input type="password" id="signup-password" placeholder="Password" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
-                <button type="submit" class="w-full bg-white text-black py-2 rounded text-sm font-medium hover:bg-zinc-200 transition">Register</button>
-            </form>
+        <div class="nav-links">
+            <a href="#" id="btn-logout">Sign Out</a>
         </div>
     </div>
+</div>
 
-    <!-- Login Modal -->
-    <div id="login-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-zinc-950 border border-zinc-800 p-8 rounded-xl max-w-md w-full space-y-4 relative">
-            <button onclick="toggleModal('login-modal')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">&times;</button>
-            <h3 class="text-xl font-bold">Log In</h3>
-            <form onsubmit="handleLogin(event)" class="space-y-3">
-                <input type="email" id="login-email" placeholder="Email Address" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
-                <input type="password" id="login-password" placeholder="Password" required class="w-full bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-500">
-                <button type="submit" class="w-full bg-white text-black py-2 rounded text-sm font-medium hover:bg-zinc-200 transition">Sign In</button>
-            </form>
-        </div>
-    </div>
+<script>
+    // Initialize configuration placeholders - Render environment variables will power the backend
+    const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL"; 
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    
+    const supabase = signUpUrl = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <!-- Frontend Logic App Script -->
-    <script>
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.toggle('hidden');
+    const authSection = document.getElementById('auth-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const emailInput = document.getElementById('auth-email');
+    const passwordInput = document.getElementById('auth-password');
+    const userWelcome = document.getElementById('user-welcome');
+    const vpnKeyDisplay = document.getElementById('vpn-key-display');
+
+    // Handle Authentication (Login/Signup auto-switch)
+    document.getElementById('btn-login').addEventListener('click', async () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        // Attempt login
+        let { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        
+        // If login fails, attempt automatic signup
+        if (error) {
+            const signup = await supabase.auth.signUp({ email, password });
+            if (signup.error) return alert(signup.error.message);
+            data = signup.data;
+            alert("Account created! Please check your email or log in.");
         }
+        
+        if (data.user) showDashboard(data.user);
+    });
 
-        // Direct user to BTCPay Server Payment Wall
-        function handlePurchase() {
-            window.open(BTCPAY_PAYMENT_URL, '_blank');
+    async function showDashboard(user) {
+        authSection.classList.add('hidden');
+        dashboardSection.classList.remove('hidden');
+        userWelcome.innerText = `Account: ${user.email}`;
+
+        // Fetch VPN Key from DB
+        let { data, error } = await supabase.from('profiles').select('vpn_key').eq('id', user.id).single();
+        if (data) {
+            vpnKeyDisplay.innerText = data.vpn_key;
+        } else {
+            // Create profile if missing
+            await supabase.from('profiles').insert({ id: user.id, email: user.email });
+            vpnKeyDisplay.innerText = 'No active VPN key';
         }
+    }
 
-        async function handleSignup(e) {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            
-            const { data, error } = await supabase.auth.signUp({ email, password });
-            if (error) alert(error.message);
-            else {
-                alert('Success! Check your email inbox for confirmation.');
-                toggleModal('signup-modal');
-            }
+    // Handle Bitcoin Checkout Generation
+    document.getElementById('btn-order-vpn').addEventListener('click', async () => {
+        const session = await supabase.auth.getSession();
+        const userId = session.data.session.user.id;
+
+        const res = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, plan: 'monthly' })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            document.getElementById('payment-box').classList.remove('hidden');
+            document.getElementById('btc-address-field').value = data.address;
+            document.getElementById('btc-amount-field').innerText = data.message;
         }
+    });
 
-        async function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+    // Handle Payment Verification
+    document.getElementById('btn-verify').addEventListener('click', async () => {
+        const session = await supabase.auth.getSession();
+        const userId = session.data.session.user.id;
+        const txid = document.getElementById('txid-input').value;
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) alert(error.message);
-            else {
-                toggleModal('login-modal');
-                checkUserSession();
-            }
+        const res = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, txid })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Payment received! Your new VPN key is active.");
+            vpnKeyDisplay.innerText = data.vpnKey;
+            document.getElementById('payment-box').classList.add('hidden');
+        } else {
+            alert("Verification failed. Please double check your TXID.");
         }
+    });
 
-        async function handleLogout() {
-            await supabase.auth.signOut();
-            window.location.reload();
-        }
-
-        // Manage views based on whether the user is logged in
-        async function checkUserSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            
-            const navAuth = document.getElementById('nav-auth-buttons');
-       
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.reload();
+    });
+</script>
+</body>
+</html>
